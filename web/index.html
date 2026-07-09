@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ShadowClip Web</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Shadow<span>Clip</span> <small>web</small></h1>
+        <button id="btnOpen" class="primary">Open videos…</button>
+        <span id="mediaInfo"></span>
+        <span class="spacer"></span>
+        <span class="hint">Drop ShadowPlay files anywhere — nothing is uploaded</span>
+    </header>
+
+    <main>
+        <aside>
+            <h2>Files <span id="fileCount"></span></h2>
+            <ul id="fileList"></ul>
+        </aside>
+
+        <section id="editor">
+            <div id="videoWrap">
+                <video id="video" playsinline preload="auto"></video>
+                <div id="emptyHint">
+                    <p><strong>Drop gameplay clips here</strong></p>
+                    <p>or use “Open videos…” — everything runs locally in your browser.</p>
+                </div>
+                <div id="playbackWarning" hidden>
+                    This browser can’t play this codec (HEVC/HDR capture?). Editing preview is
+                    unavailable, but export may still work.
+                </div>
+            </div>
+
+            <div id="transport">
+                <button id="btnPrevFrame" title="Previous frame (←)">⏮ frame</button>
+                <button id="btnPlay" title="Play (Space)">▶</button>
+                <button id="btnNextFrame" title="Next frame (→)">frame ⏭</button>
+                <span id="timeText" class="mono">0:00.000 / 0:00.000</span>
+                <span id="frameText" class="mono"></span>
+                <span class="spacer"></span>
+                <button id="btnScreenshot" title="Copy screenshot (S)">📷 Screenshot</button>
+                <label class="chk"><input type="checkbox" id="muteChk"> Mute</label>
+                <input type="range" id="volume" min="0" max="1" step="0.01" title="Volume">
+            </div>
+
+            <div id="timeline" title="Click / drag to seek. Drag segment edges to trim.">
+                <canvas id="filmstrip"></canvas>
+                <div id="segLayer"></div>
+                <div id="playhead"></div>
+            </div>
+
+            <div id="segmentsPanel">
+                <div class="panel-head">
+                    <h2>Segments</h2>
+                    <button id="btnAddSegment" title="Split the segment under the playhead, or start a new one at the playhead">+ Add at playhead</button>
+                    <span class="hint">[ and ] set start/end of the segment under the playhead • segments are concatenated on export</span>
+                </div>
+                <div id="segRows"></div>
+            </div>
+
+            <div id="exportPanel">
+                <div class="panel-head"><h2>Create clip</h2><span id="exportEstimate" class="mono"></span></div>
+                <div class="export-controls">
+                    <input id="outName" type="text" spellcheck="false" placeholder="clip name">
+                    <select id="encoderSel" title="Encoder">
+                        <option value="re-encode">Re-encode (frame-accurate, slower)</option>
+                        <option value="copy">Stream copy (fast, keyframe cuts)</option>
+                    </select>
+                    <label class="chk"><input type="checkbox" id="forceWide"> Force 16:9</label>
+                    <button id="btnExport" class="primary">Create clip</button>
+                    <button id="btnCancelExport" hidden>Cancel</button>
+                </div>
+                <p id="copyNote" class="hint" hidden></p>
+                <div id="exportProgressWrap" hidden>
+                    <div id="exportBarTrack"><div id="exportBar"></div></div>
+                    <span id="exportStatus" class="mono"></span>
+                </div>
+                <pre id="exportLog" hidden></pre>
+                <div id="exportResult" hidden>
+                    <a id="resultLink" href="#">Save clip</a>
+                    <video id="resultVideo" controls playsinline></video>
+                </div>
+                <p class="hint">The first export downloads the ffmpeg engine (~31&nbsp;MB) from a CDN. Your video never leaves this machine.</p>
+            </div>
+        </section>
+    </main>
+
+    <div id="dropOverlay" hidden><div>Drop to open</div></div>
+    <div id="toast"></div>
+    <input type="file" id="filePicker" accept="video/*,.mp4,.m4v,.mov,.mkv,.webm" multiple hidden>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
